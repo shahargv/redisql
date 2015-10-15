@@ -12,6 +12,22 @@ DROP FUNCTION [redisql].[DeleteKey]
 GO
 DROP PROCEDURE [redisql].[ConvertXmlToRowset]
 GO
+DROP FUNCTION [redisql].[SetStringValueIfNotExists]
+GO
+DROP FUNCTION [redisql].[Rename]
+GO
+DROP FUNCTION [redisql].[SetRelativeExpiration]
+GO
+DROP FUNCTION [redisql].[SetExactExpiration]
+GO
+DROP FUNCTION [redisql].[GetKeyTTL]
+GO
+DROP PROCEDURE [redisql].[SaveChanges]
+GO
+DROP PROCEDURE [redisql].[Flush]
+GO
+DROP FUNCTION [redisql].[GetLastSaved]
+GO
 DROP ASSEMBLY [RedisSqlCache]
 GO
 DROP SCHEMA redisql

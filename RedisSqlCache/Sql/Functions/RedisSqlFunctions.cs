@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.SqlServer.Server;
+using RedisSqlCache.Common;
 
 namespace RedisSqlCache.Sql.Functions
 {
@@ -33,6 +34,82 @@ namespace RedisSqlCache.Sql.Functions
                 redis.Expire(key, (int)expiration.Value.TotalSeconds);
         }
 
+        [SqlFunction]
+        public static bool SetStringValueIfNotExists(string host, int port, string password, int? dbId, string key, string value, TimeSpan? expiration)
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            bool wasKeyCreated = redis.SetNX(key, value);
+            if (wasKeyCreated && expiration != null)
+                return redis.Expire(key, (int)expiration.Value.TotalSeconds);
+            return wasKeyCreated;
+        }
+
+        [SqlFunction]
+        public static bool Rename(string host, int port, string password, int? dbId, string key, string keyNewName)
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            return redis.Rename(key, keyNewName);
+        }
+
+        [SqlFunction]
+        public static bool SetRelativeExpiration(string host, int port, string password, int? dbId, string key, TimeSpan expiration)
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            return redis.Expire(key, (int)expiration.TotalSeconds);
+        }
+
+        [SqlFunction]
+        public static bool SetExactExpiration(string host, int port, string password, int? dbId, string key, DateTime expiration)
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            return redis.ExpireAt(key, (int)DateTimeUtils.ToUnixTime(expiration));
+        }
+
+        [SqlFunction]
+        public static int? GetKeyTTL(string host, int port, string password, int? dbId, string key)
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            var ttl = redis.TimeToLive(key);
+            return ttl >= 0 ? ttl : (int?)null;
+        }
+
+        [SqlFunction]
+        public static void Save(string host, int port, string password, int? dbId, bool isBackground)
+
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            if (isBackground)
+            {
+                redis.BackgroundSave();
+            }
+            else
+            {
+                redis.Save();
+            }
+        }
+
+        [SqlFunction]
+        public static void Flush(string host, int port, string password, int? dbId)
+
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            if (dbId != null)
+            {
+                redis.FlushDb();
+            }
+            else
+            {
+                redis.FlushAll();
+            }
+        }
+
+        [SqlFunction]
+        public static DateTime GetLastSaved(string host, int port, string password, int? dbId)
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            return redis.LastSave;
+        }
+
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static string GetSetStringValue(string host, int port, string password, int? dbId, string key, string value, TimeSpan? expiration)
         {
@@ -56,5 +133,6 @@ namespace RedisSqlCache.Sql.Functions
             var redis = GetConnection(host, port, password, dbId);
             return redis.Remove(key);
         }
+
     }
 }

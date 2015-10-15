@@ -39,6 +39,45 @@ RETURNS bit
 AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[DeleteKey]
 GO
 
+CREATE FUNCTION redisql.SetStringValueIfNotExists(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @expiration time = null)
+RETURNS bit
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[SetStringValueIfNotExists]
+GO
+
+CREATE FUNCTION redisql.Rename(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @keyNewName nvarchar(250))
+RETURNS bit
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[Rename]
+GO
+
+CREATE FUNCTION redisql.SetRelativeExpiration(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @expiration time)
+RETURNS bit
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[SetRelativeExpiration]
+GO
+
+CREATE FUNCTION redisql.SetExactExpiration(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @expiration datetime)
+RETURNS bit
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[SetExactExpiration]
+GO
+
+CREATE FUNCTION redisql.GetKeyTTL(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
+RETURNS int
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetKeyTTL]
+GO
+
+CREATE PROCEDURE redisql.[SaveChanges](@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @isBackground bit = 0)
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[Save]
+GO
+
+CREATE PROCEDURE redisql.Flush(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null)
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[Flush]
+GO
+
+CREATE FUNCTION redisql.GetLastSaved(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null)
+RETURNS datetime
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetLastSaved]
+GO
+
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
