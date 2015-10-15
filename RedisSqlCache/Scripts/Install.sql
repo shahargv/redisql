@@ -77,6 +77,15 @@ RETURNS datetime
 AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetLastSaved]
 GO
 
+CREATE FUNCTION redisql.GetKeys(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @keysFilter nvarchar(250) ='*')
+RETURNS table(KeyName nvarchar(250))
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetKeys]
+GO
+
+CREATE FUNCTION redisql.GetInfo(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null)
+RETURNS table(Title nvarchar(250), Value nvarchar(max))
+AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetInfo]
+GO
 
 SET ANSI_NULLS ON
 GO

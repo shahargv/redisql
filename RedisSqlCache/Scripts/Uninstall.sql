@@ -28,6 +28,10 @@ DROP PROCEDURE [redisql].[Flush]
 GO
 DROP FUNCTION [redisql].[GetLastSaved]
 GO
+DROP FUNCTION [redisql].[GetKeys]
+GO
+DROP FUNCTION [redisql].[GetInfo]
+GO
 DROP ASSEMBLY [RedisSqlCache]
 GO
 DROP SCHEMA redisql

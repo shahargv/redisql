@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Text;
 using Microsoft.SqlServer.Server;
 using RedisSqlCache.Common;
@@ -18,6 +20,7 @@ namespace RedisSqlCache.Sql.Functions
                 redis.Db = dbId.Value;
             return redis;
         }
+
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static bool IsKeyExists(string host, int port, string password, int? dbId, string key)
         {
@@ -26,7 +29,8 @@ namespace RedisSqlCache.Sql.Functions
         }
 
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static void SetStringValue(string host, int port, string password, int? dbId, string key, string value, TimeSpan? expiration)
+        public static void SetStringValue(string host, int port, string password, int? dbId, string key, string value,
+            TimeSpan? expiration)
         {
             var redis = GetConnection(host, port, password, dbId);
             redis.Set(key, value);
@@ -34,8 +38,9 @@ namespace RedisSqlCache.Sql.Functions
                 redis.Expire(key, (int)expiration.Value.TotalSeconds);
         }
 
-        [SqlFunction]
-        public static bool SetStringValueIfNotExists(string host, int port, string password, int? dbId, string key, string value, TimeSpan? expiration)
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
+        public static bool SetStringValueIfNotExists(string host, int port, string password, int? dbId, string key,
+            string value, TimeSpan? expiration)
         {
             var redis = GetConnection(host, port, password, dbId);
             bool wasKeyCreated = redis.SetNX(key, value);
@@ -44,28 +49,30 @@ namespace RedisSqlCache.Sql.Functions
             return wasKeyCreated;
         }
 
-        [SqlFunction]
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static bool Rename(string host, int port, string password, int? dbId, string key, string keyNewName)
         {
             var redis = GetConnection(host, port, password, dbId);
             return redis.Rename(key, keyNewName);
         }
 
-        [SqlFunction]
-        public static bool SetRelativeExpiration(string host, int port, string password, int? dbId, string key, TimeSpan expiration)
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
+        public static bool SetRelativeExpiration(string host, int port, string password, int? dbId, string key,
+            TimeSpan expiration)
         {
             var redis = GetConnection(host, port, password, dbId);
             return redis.Expire(key, (int)expiration.TotalSeconds);
         }
 
-        [SqlFunction]
-        public static bool SetExactExpiration(string host, int port, string password, int? dbId, string key, DateTime expiration)
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
+        public static bool SetExactExpiration(string host, int port, string password, int? dbId, string key,
+            DateTime expiration)
         {
             var redis = GetConnection(host, port, password, dbId);
             return redis.ExpireAt(key, (int)DateTimeUtils.ToUnixTime(expiration));
         }
 
-        [SqlFunction]
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static int? GetKeyTTL(string host, int port, string password, int? dbId, string key)
         {
             var redis = GetConnection(host, port, password, dbId);
@@ -73,7 +80,7 @@ namespace RedisSqlCache.Sql.Functions
             return ttl >= 0 ? ttl : (int?)null;
         }
 
-        [SqlFunction]
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static void Save(string host, int port, string password, int? dbId, bool isBackground)
 
         {
@@ -88,7 +95,7 @@ namespace RedisSqlCache.Sql.Functions
             }
         }
 
-        [SqlFunction]
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static void Flush(string host, int port, string password, int? dbId)
 
         {
@@ -103,7 +110,7 @@ namespace RedisSqlCache.Sql.Functions
             }
         }
 
-        [SqlFunction]
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static DateTime GetLastSaved(string host, int port, string password, int? dbId)
         {
             var redis = GetConnection(host, port, password, dbId);
@@ -111,7 +118,8 @@ namespace RedisSqlCache.Sql.Functions
         }
 
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static string GetSetStringValue(string host, int port, string password, int? dbId, string key, string value, TimeSpan? expiration)
+        public static string GetSetStringValue(string host, int port, string password, int? dbId, string key,
+            string value, TimeSpan? expiration)
         {
             var redis = GetConnection(host, port, password, dbId);
             string result = redis.GetSet(key, value);
@@ -134,5 +142,30 @@ namespace RedisSqlCache.Sql.Functions
             return redis.Remove(key);
         }
 
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false, FillRowMethodName = "GetKeys_RowFiller")]
+        public static IEnumerable GetKeys(string host, int port, string password, int? dbId, string filter)
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            return redis.GetKeys(filter);
+        }
+
+        public static void GetKeys_RowFiller(object item, out SqlString keyName)
+        {
+            keyName = (string)item;
+        }
+
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false, FillRowMethodName = "GetInfo_RowFiller")]
+        public static IEnumerable GetInfo(string host, int port, string password, int? dbId)
+        {
+            var redis = GetConnection(host, port, password, dbId);
+            return redis.GetInfo();
+        }
+
+        public static void GetInfo_RowFiller(object item, out SqlString title, out SqlString value)
+        {
+            var settingRow = (KeyValuePair<string, string>)item;
+            title = settingRow.Key;
+            value = settingRow.Value;
+        }
     }
 }
