@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RedisSqlCache.Common
+namespace RediSql.Common
 {
     public static class DateTimeUtils
     {

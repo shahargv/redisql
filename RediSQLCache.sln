@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisSqlCache", "RedisSqlCache\RedisSqlCache.csproj", "{666FE4B7-0A6B-44DF-B179-C394234E33DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RediSql", "RedisSqlCache\RediSql.csproj", "{666FE4B7-0A6B-44DF-B179-C394234E33DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerScriptGenerator", "InstallerScriptGenerator\InstallerScriptGenerator.csproj", "{CABBBA96-75AF-4F10-96AB-72B814B5A97E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{666FE4B7-0A6B-44DF-B179-C394234E33DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{666FE4B7-0A6B-44DF-B179-C394234E33DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{666FE4B7-0A6B-44DF-B179-C394234E33DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CABBBA96-75AF-4F10-96AB-72B814B5A97E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CABBBA96-75AF-4F10-96AB-72B814B5A97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CABBBA96-75AF-4F10-96AB-72B814B5A97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CABBBA96-75AF-4F10-96AB-72B814B5A97E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

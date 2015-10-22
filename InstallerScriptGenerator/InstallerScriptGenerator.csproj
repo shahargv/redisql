@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F29BAFF3-6344-425E-9C9E-269410A42DCC}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{CABBBA96-75AF-4F10-96AB-72B814B5A97E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RediSQLCache.Common</RootNamespace>
-    <AssemblyName>RediSQLCache.Common</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <RootNamespace>InstallerScriptGenerator</RootNamespace>
+    <AssemblyName>InstallerScriptGenerator</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,12 +43,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\Buffer.cs" />
-    <Compile Include="Collections\CollectionExtMethods.cs" />
-    <Compile Include="Delegates\Delegates.cs" />
+    <Compile Include="BO\ExportedMemberFunction.cs" />
+    <Compile Include="BO\ExportedMemberProcedure.cs" />
+    <Compile Include="InstallerScriptBuilder.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BO\SqlClrExportedMember.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="InstallerTemplate.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RedisSqlCache\OLDRediSql.csproj">
+      <Project>{666FE4B7-0A6B-44DF-B179-C394234E33DE}</Project>
+      <Name>OLDRediSql</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

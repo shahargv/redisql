@@ -32,7 +32,7 @@ DROP FUNCTION [redisql].[GetKeys]
 GO
 DROP FUNCTION [redisql].[GetInfo]
 GO
-DROP ASSEMBLY [RedisSqlCache]
+DROP ASSEMBLY [RediSql]
 GO
 DROP SCHEMA redisql
 GO

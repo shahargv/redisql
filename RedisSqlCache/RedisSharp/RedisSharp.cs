@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Diagnostics;
-using RedisSqlCache.Common.Collections;
+using System.Linq;
 
 
 public class Redis : IDisposable
@@ -138,7 +138,7 @@ public class Redis : IDisposable
         if (dict == null)
             throw new ArgumentNullException("dict");
 
-        Set(CollectionExtMethods.ToDictionary(dict, k => k.Key, v => Encoding.UTF8.GetBytes(v.Value)));
+        Set(dict.ToDictionary(k => k.Key, v => Encoding.UTF8.GetBytes(v.Value)));
     }
 
     public void Set(IDictionary<string, byte[]> dict)
@@ -146,7 +146,7 @@ public class Redis : IDisposable
         if (dict == null)
             throw new ArgumentNullException("dict");
 
-        MSet(CollectionExtMethods.ToArray(dict.Keys), CollectionExtMethods.ToArray(dict.Values));
+        MSet(dict.Keys.ToArray(), dict.Values.ToArray());
     }
 
     public void MSet(string[] keys, byte[][] values)

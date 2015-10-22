@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RediSQLCache.Common")]
+[assembly: AssemblyTitle("InstallerScriptGenerator")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RediSQLCache.Common")]
+[assembly: AssemblyProduct("InstallerScriptGenerator")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f29baff3-6344-425e-9c9e-269410a42dcc")]
+[assembly: Guid("cabbba96-75af-4f10-96ab-72b814b5a97e")]
 
 // Version information for an assembly consists of the following four values:
 //

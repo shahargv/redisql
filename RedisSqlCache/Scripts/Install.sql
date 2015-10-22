@@ -4,89 +4,97 @@ USE check1
 
 EXEC('ALTER DATABASE ' + @dbname + ' SET TRUSTWORTHY ON')
 GO
-CREATE ASSEMBLY [RedisSqlCache]
+-------------------------------------------------------------------------------------------------------------
+CREATE ASSEMBLY [RediSql]
 AUTHORIZATION [dbo]
-FROM 'C:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\RedisSqlCache.dll'
+FROM 'C:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\RediSql.dll'
 WITH PERMISSION_SET = UNSAFE
 GO
 
+-------------------------------------------------------------------------------------------------------------
 GO
 CREATE SCHEMA [redisql] AUTHORIZATION [dbo]
 GO
-
-CREATE FUNCTION redisql.IsKeyExists(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
-RETURNS bit
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[IsKeyExists]
-GO
-
-CREATE PROCEDURE redisql.SetStringValue(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @expiration time = null)
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[SetStringValue]
-GO
-
-CREATE FUNCTION redisql.GetStringValue(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
-RETURNS nvarchar(max)
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetStringValue]
-
-GO
-
-CREATE FUNCTION redisql.GetSetStringValue(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @expiration time = null)
-RETURNS nvarchar(max)
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetSetStringValue]
-GO
-
-CREATE FUNCTION redisql.DeleteKey(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
-RETURNS bit
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[DeleteKey]
-GO
-
-CREATE FUNCTION redisql.SetStringValueIfNotExists(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @expiration time = null)
-RETURNS bit
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[SetStringValueIfNotExists]
-GO
-
+---------------CLR SQL FUNCTIONS -----------------------
+----KEYS----
 CREATE FUNCTION redisql.Rename(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @keyNewName nvarchar(250))
 RETURNS bit
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[Rename]
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlKeysManipulationFunctions].[Rename]
 GO
-
+-------------------------------------------------------------------------------------------------------------
 CREATE FUNCTION redisql.SetRelativeExpiration(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @expiration time)
 RETURNS bit
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[SetRelativeExpiration]
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlKeysManipulationFunctions].[SetRelativeExpiration]
 GO
-
+-------------------------------------------------------------------------------------------------------------
 CREATE FUNCTION redisql.SetExactExpiration(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @expiration datetime)
 RETURNS bit
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[SetExactExpiration]
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlKeysManipulationFunctions].[SetExactExpiration]
 GO
-
+-------------------------------------------------------------------------------------------------------------
 CREATE FUNCTION redisql.GetKeyTTL(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
 RETURNS int
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetKeyTTL]
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlKeysManipulationFunctions].[GetKeyTTL]
 GO
-
-CREATE PROCEDURE redisql.[SaveChanges](@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @isBackground bit = 0)
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[Save]
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.IsKeyExists(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
+RETURNS bit
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlKeysManipulationFunctions].[IsKeyExists]
 GO
-
-CREATE PROCEDURE redisql.Flush(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null)
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[Flush]
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.DeleteKey(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
+RETURNS bit
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlKeysManipulationFunctions].[DeleteKey]
 GO
-
-CREATE FUNCTION redisql.GetLastSaved(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null)
-RETURNS datetime
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetLastSaved]
-GO
-
+--------------------------------------------------------------------------------------------------------------
 CREATE FUNCTION redisql.GetKeys(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @keysFilter nvarchar(250) ='*')
 RETURNS table(KeyName nvarchar(250))
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetKeys]
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlKeysManipulationFunctions].[GetKeys]
+GO
+---------------------------------------------------------------------------------------------------------------
+------STRING VALUES------
+CREATE PROCEDURE redisql.SetStringValue(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @expiration time = null)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlStringValuesFunctions].[SetStringValue]
+GO
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.GetStringValue(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
+RETURNS nvarchar(max)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlStringValuesFunctions].[GetStringValue]
+
+GO
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.GetSetStringValue(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @expiration time = null)
+RETURNS nvarchar(max)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlStringValuesFunctions].[GetSetStringValue]
 GO
 
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.SetStringValueIfNotExists(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @expiration time = null)
+RETURNS bit
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlStringValuesFunctions].[SetStringValueIfNotExists]
+GO
+-------------------------------------------------------------------------------------------------------------
+
+-----GLOBAL SERVER FUNCTIONS------------------
+CREATE PROCEDURE redisql.[SaveChanges](@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @isBackground bit = 0)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlGlobalServerFunctions].[Save]
+GO
+-------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE redisql.Flush(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlGlobalServerFunctions].[Flush]
+GO
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.GetLastSaved(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null)
+RETURNS datetime
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlGlobalServerFunctions].[GetLastSaved]
+GO
+
+-------------------------------------------------------------------------------------------------------------
 CREATE FUNCTION redisql.GetInfo(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null)
 RETURNS table(Title nvarchar(250), Value nvarchar(max))
-AS EXTERNAL NAME [RedisSqlCache].[RedisSqlCache.Sql.Functions.RedisSqlFunctions].[GetInfo]
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlGlobalServerFunctions].[GetInfo]
 GO
-
+-------------------------------------------------------------------------------------------------------------
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -160,7 +168,7 @@ END
 
 
 GO
-
+-------------------------------------------------------------------------------------------------------------
 GO
 sp_configure 'show advanced options', 1;
 GO
@@ -170,3 +178,4 @@ sp_configure 'clr enabled', 1;
 GO
 RECONFIGURE;
 GO
+-------------------------------------------------------------------------------------------------------------
