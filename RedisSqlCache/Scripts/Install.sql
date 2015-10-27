@@ -100,7 +100,7 @@ RETURNS int
 AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlLists].[GetListLength]
 GO
 -------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE redisql.AddToList(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @expiration time = null)
+CREATE PROCEDURE redisql.AddToList(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @addToEnd bit=1, @expiration time = null)
 AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlLists].[AddToList]
 GO
 -------------------------------------------------------------------------------------------------------------

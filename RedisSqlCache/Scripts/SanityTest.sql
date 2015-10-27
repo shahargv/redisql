@@ -65,3 +65,30 @@ ELSE
 BEGIN
 	PRINT 'success: add key and check if exists with expiration (test 3)'
 END
+GO
+--TEST 4: Check lists
+DECLARE @test4KeyName varchar(50) = CAST(NEWID() as varchar(50))
+EXEC [redisql].AddToList
+		@host = N'localhost',
+		@port = 6379,
+		@key = @test4KeyName,
+		@value = N'val1'
+EXEC [redisql].AddToList
+		@host = N'localhost',
+		@port = 6379,
+		@key = @test4KeyName,
+		@value = N'val2'
+EXEC [redisql].AddToList
+		@host = N'localhost',
+		@port = 6379,
+		@key = @test4KeyName,
+		@value = N'val3'
+DECLARE @numberOfItemsInResults int = (SELECT COUNT(*) FROM redisql.GetListItems('localhost', default, default, default, @test4KeyName, default, default))
+IF @numberOfItemsInResults <> 3
+BEGIN
+	PRINT 'ERROR: lists test (test 4)'
+END
+ELSE
+BEGIN
+	PRINT 'success: lists test (test 4)'
+END
