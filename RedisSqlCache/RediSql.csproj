@@ -40,6 +40,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedisSharp\RedisSharp.cs" />
     <Compile Include="SqlClrComponents\Common\RedisConnection.cs" />
+    <Compile Include="SqlClrComponents\RedisqlLists.cs" />
     <Compile Include="SqlClrComponents\RedisqlStringValuesFunctions.cs" />
     <Compile Include="SqlClrComponents\RedisqlKeysManipulationFunctions.cs" />
     <Compile Include="SqlClrComponents\RedisqlGlobalServerFunctions.cs" />

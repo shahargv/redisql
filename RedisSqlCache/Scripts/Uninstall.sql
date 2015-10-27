@@ -32,6 +32,16 @@ DROP FUNCTION [redisql].[GetKeys]
 GO
 DROP FUNCTION [redisql].[GetInfo]
 GO
+DROP FUNCTION [redisql].[GetListItems]
+GO
+DROP FUNCTION [redisql].[GetListItemInIndex]
+GO
+DROP FUNCTION [redisql].[ListLeftPop]
+GO
+DROP FUNCTION [redisql].[ListRightPop]
+GO
+DROP FUNCTION [redisql].[GetListLength]
+GO
 DROP ASSEMBLY [RediSql]
 GO
 DROP SCHEMA redisql

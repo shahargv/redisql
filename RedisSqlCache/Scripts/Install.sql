@@ -74,7 +74,36 @@ RETURNS bit
 AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlStringValuesFunctions].[SetStringValueIfNotExists]
 GO
 -------------------------------------------------------------------------------------------------------------
-
+-----LISTS FUNCTIONS------------------
+CREATE FUNCTION redisql.GetListItems(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @start int=0, @end int=-1)
+RETURNS table(Value nvarchar(max))
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlLists].[GetListItems]
+GO
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.GetListItemInIndex(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @index int)
+RETURNS nvarchar(max)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlLists].[GetListItemAtIndex]
+GO
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.ListLeftPop(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
+RETURNS nvarchar(max)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlLists].[LeftPop]
+GO
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.ListRightPop(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
+RETURNS nvarchar(max)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlLists].[RightPop]
+GO
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.GetListLength(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
+RETURNS int
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlLists].[GetListLength]
+GO
+-------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE redisql.AddToList(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @value nvarchar(max), @expiration time = null)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlLists].[AddToList]
+GO
+-------------------------------------------------------------------------------------------------------------
 -----GLOBAL SERVER FUNCTIONS------------------
 CREATE PROCEDURE redisql.[SaveChanges](@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @isBackground bit = 0)
 AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlGlobalServerFunctions].[Save]
@@ -95,6 +124,7 @@ RETURNS table(Title nvarchar(250), Value nvarchar(max))
 AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlGlobalServerFunctions].[GetInfo]
 GO
 -------------------------------------------------------------------------------------------------------------
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
