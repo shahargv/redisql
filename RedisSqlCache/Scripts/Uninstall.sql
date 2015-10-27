@@ -42,6 +42,12 @@ DROP FUNCTION [redisql].[ListRightPop]
 GO
 DROP FUNCTION [redisql].[GetListLength]
 GO
+DROP PROCEDURE [redisql].[AddToList]
+GO
+DROP PROCEDURE [redisql].[StoreQueryResultsData]
+GO
+DROP PROCEDURE [redisql].[GetStoredRowset]
+GO
 DROP ASSEMBLY [RediSql]
 GO
 DROP SCHEMA redisql

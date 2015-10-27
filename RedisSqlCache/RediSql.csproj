@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DateTimeUtils.cs" />
@@ -41,11 +42,13 @@
     <Compile Include="RedisSharp\RedisSharp.cs" />
     <Compile Include="SqlClrComponents\Common\RedisConnection.cs" />
     <Compile Include="SqlClrComponents\RedisqlLists.cs" />
+    <Compile Include="SqlClrComponents\RedisqlRowsets.cs" />
     <Compile Include="SqlClrComponents\RedisqlStringValuesFunctions.cs" />
     <Compile Include="SqlClrComponents\RedisqlKeysManipulationFunctions.cs" />
     <Compile Include="SqlClrComponents\RedisqlGlobalServerFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\GetStoredRowset.sql" />
     <Content Include="Scripts\Install.sql" />
     <Content Include="Scripts\SanityTest.sql" />
     <Content Include="Scripts\Uninstall.sql" />
