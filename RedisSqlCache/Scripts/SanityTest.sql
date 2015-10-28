@@ -92,3 +92,39 @@ ELSE
 BEGIN
 	PRINT 'success: lists test (test 4)'
 END
+--TEST 5: Rowset storing
+DECLARE @test5KeyName varchar(50) = 'rr1'
+
+IF OBJECT_ID('tempdb..#test5') IS NOT NULL DROP TABLE #test5
+CREATE TABLE #test5(col1 nvarchar(200), col2 varchar(200), col3 nvarchar(max) null, col4 int null)
+INSERT INTO #test5(col1, col2, col3, col4) VALUES ('c1val', 'c2val', 'c3val', 9)
+INSERT INTO #test5(col1, col2, col3, col4) VALUES ('c1val', 'c2val', null, 90)
+INSERT INTO #test5(col1, col2, col3, col4) VALUES ('c1val', 'c2val', 'c3val', 91)
+INSERT INTO #test5(col1, col2, col3, col4) VALUES ('c1val', 'c2val', 'c3val', null)
+INSERT INTO #test5(col1, col2, col3, col4) VALUES ('c1val', 'c2val', 'c3val', null)
+EXEC [redisql].StoreQueryResultsData
+		@host = N'localhost',
+		@port = 6379,
+		@key = @test5KeyName,
+		@query = N'SELECT * FROM #test5',
+		@replaceExisting = 1
+DECLARE @backFromCache table (col1 nvarchar(200), col2 varchar(200), col3 nvarchar(max) null, col4 int null) 
+IF OBJECT_ID('tempdb..#test5_b') IS NOT NULL DROP TABLE #test5_b
+CREATE TABLE #test5_b(col1 nvarchar(200), col2 varchar(200), col3 nvarchar(max) null, col4 int null)
+INSERT INTO #test5_b(col1,col2,col3,col4)  EXEC [redisql].[GetStoredRowset]		@host = N'localhost',		@key =@test5KeyName
+IF(SELECT COUNT(*) FROM #test5_b) <> 5
+BEGIN
+	PRINT 'ERROR: rowset test - incorrect number of total returned rows (test5)'
+END
+ELSE
+BEGIN
+	PRINT 'success: rowset test - correct number of total returned rows (test5)'
+END
+IF(SELECT COUNT(*) FROM #test5_b WHERE col4 IS NULL) <> 2
+BEGIN
+	PRINT 'ERROR: rowset test - incorrect number of null returned rows (test5)'
+END
+ELSE
+BEGIN
+	PRINT 'success: rowset test - correct number of null returned rows (test5)'
+END

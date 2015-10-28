@@ -105,7 +105,7 @@ AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlLists].[AddToList]
 GO
 -------------------------------------------------------------------------------------------------------------
 -----ROWSET FUNCTIONS------------------
-CREATE PROCEDURE redisql.StoreQueryResultsData(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @query nvarchar(max), @expiration time = null)
+CREATE PROCEDURE redisql.StoreQueryResultsData(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250), @query nvarchar(max), @expiration time = null, @replaceExisting bit = 0)
 AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlRowsets].[StoreQueryResultsData]
 GO
 -------------------------------------------------------------------------------------------------------------
@@ -214,65 +214,52 @@ GO
 CREATE PROCEDURE redisql.GetStoredRowset
 	@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(256)
 AS
+
+
 BEGIN
 	SET NOCOUNT ON;
 
-	IF OBJECT_ID('tempdb..#dataToPivot') IS NOT NULL DROP TABLE #dataToPivot
+	IF OBJECT_ID('tempdb..#items') IS NOT NULL DROP TABLE #items
 
-
-
-	CREATE TABLE #dataToPivot (BatchID uniqueidentifier, KeyName nvarchar(max), Value nvarchar(max))
-	INSERT INTO #dataToPivot(BatchID, KeyName, Value)
-	SELECT	rowXml.id,
-			keyValueSet.Name,
-			keyValueSet.Value
+	CREATE TABLE #items(val nvarchar(max))
+	INSERT INTO #items(val)
+	SELECT Value 
 	FROM redisql.GetListItems(@host, @port, @password, @dbId, @key, default, default)
-	OUTER APPLY	(
-					SELECT CAST(Value as xml) xmlData, NEWID() id
-				) rowXml
-	OUTER APPLY	(
-					SELECT
-						C.Name,
-						C.Value
-					FROM rowXml.xmlData.nodes('/item/*') as T(C)
-					OUTER APPLY (
-									SELECT
-										T.C.value('local-name(.)', 'nvarchar(max)') as Name,
-										T.C.value('(./text())[1]', 'nvarchar(max)') as Value
-									UNION ALL
-									SELECT
-										A.C.value('local-name(.)', 'nvarchar(max)') as Name,
-										A.C.value('.', 'nvarchar(max)') as Value
-									FROM T.C.nodes('@*') as A(C)
-								) as C
-					where C.Value is not null 
-				) keyValueSet
-	DECLARE @colsNames NVARCHAR(2000)
-	SELECT  @colsNames = STUFF(( SELECT DISTINCT TOP 100 PERCENT
-									'],[' + t2.keyName
-							FROM    #dataToPivot AS t2
-							ORDER BY '],[' + t2.keyName
-							FOR XML PATH('')
-						  ), 1, 2, '') + ']'
 
-	DECLARE @query NVARCHAR(4000)
-	SET @query = N'SELECT '+
-	@colsNames +'
-	FROM
-	(SELECT  t2.BatchID
-		  , t1.KeyName
-		  , t1.Value
-	FROM    #dataToPivot AS t1
-			JOIN #dataToPivot AS t2 ON t1.BatchID = t2.BatchID) p
-	PIVOT
-	(
-	MAX([Value])
-	FOR KeyName IN
-	( '+
-	@colsNames +' )
-	) AS pvt
-	ORDER BY BatchID;'
-	EXECUTE(@query)
+	DECLARE @metadataXml xml = (SELECT TOP 1 cast(val as xml) FROM #items)
+	DELETE TOP (1)
+	FROM   #items
+
+	DECLARE @columnsMetadata table(Seq int, Name nvarchar(250), DataType varchar(100), Size int, UnifiedDataTypeLength varchar(100))
+	INSERT INTO @columnsMetadata(Seq, Name, DataType, Size, UnifiedDataTypeLength)
+	SELECT	col.value('(@order)[1]', 'nvarchar(max)'),
+			col.value('(@name)[1]', 'nvarchar(max)'),
+			col.value('(@sqlType)[1]', 'nvarchar(max)'),
+			col.value('(@size)[1]', 'int'),
+			CASE WHEN col.value('(@sqlType)[1]', 'nvarchar(max)') IN ('nvarchar', 'varchar', 'char', 'text', 'ntext', 'nchar') AND col.value('(@size)[1]', 'int') <= 8000 THEN col.value('(@sqlType)[1]', 'nvarchar(max)') + '(' + col.value('(@size)[1]', 'varchar(10)') + ')' ELSE col.value('(@sqlType)[1]', 'nvarchar(max)') END
+	FROM @metadataXml.nodes('/ColumnsMetadata/Column') as columns(col)
+
+	DECLARE @dynamicSelectors nvarchar(max)
+	SELECT @dynamicSelectors =COALESCE(@dynamicSelectors + ', ', '') + 'T.C.value(''/item[1]/' +Name +'[1]'', ''' + UnifiedDataTypeLength + ''') ' + Name 
+	FROM @columnsMetadata
+	ORDER BY Seq
+
+	DECLARE @sql nvarchar(max) =
+	'
+		SELECT o.*
+		FROM #items
+		OUTER APPLY	(
+						SELECT CAST(val as xml) xmlData
+					) rowXml
+		OUTER APPLY	(
+						SELECT TOP 1 dataColumns.*
+						FROM rowXml.xmlData.nodes(''/item/*'') as T(C)
+						OUTER APPLY	(
+										SELECT ' + @dynamicSelectors + '
+									) dataColumns
+					) o
+	'
+	EXECUTE(@sql)
 END
 GO
 
