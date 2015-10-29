@@ -43,12 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BO\ExportedMemberFunction.cs" />
-    <Compile Include="BO\ExportedMemberProcedure.cs" />
-    <Compile Include="InstallerScriptBuilder.cs" />
+    <Compile Include="BO\ExportedSqlAssembly.cs" />
+    <Compile Include="BO\ExportedClrMethod.cs" />
+    <Compile Include="BO\ExportedItemBase.cs" />
+    <Compile Include="BO\ExportedSqlFunction.cs" />
+    <Compile Include="BO\ExportedSqlProcedure.cs" />
+    <Compile Include="BO\SqlParameter.cs" />
+    <Compile Include="ExternalInterfaces\Attributes\ExportedFunctionAttribute.cs" />
+    <Compile Include="ExternalInterfaces\Attributes\SqlInstallerScriptGeneratorExportedAssembly.cs" />
+    <Compile Include="ExternalInterfaces\Attributes\SqlInstallerScriptGeneratorExportedAttributeBase.cs" />
+    <Compile Include="ExternalInterfaces\Attributes\SqlInstallerScriptGeneratorExportedProcedure.cs" />
+    <Compile Include="ExternalInterfaces\Attributes\SqlParameterAttribute.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BO\SqlClrExportedMember.cs" />
+    <Compile Include="Utils\ClrSqlTermsConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -57,11 +65,12 @@
     <Content Include="InstallerTemplate.sql" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RedisSqlCache\OLDRediSql.csproj">
+    <ProjectReference Include="..\RedisSqlCache\RediSql.csproj">
       <Project>{666FE4B7-0A6B-44DF-B179-C394234E33DE}</Project>
       <Name>OLDRediSql</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
