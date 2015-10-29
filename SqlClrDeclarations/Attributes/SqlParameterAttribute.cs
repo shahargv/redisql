@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace InstallerScriptGenerator.ExternalInterfaces.Attributes
+namespace SqlClrDeclarations.Attributes
 {
     [AttributeUsage(AttributeTargets.Parameter)]
     public class SqlParameterAttribute : Attribute

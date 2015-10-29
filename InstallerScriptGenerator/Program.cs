@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using InstallerScriptGenerator.BO;
 using Microsoft.SqlServer.Server;
-using RediSql.Sql.Attributes;
+using SqlClrDeclarations.Attributes;
+using SqlClrDeclarations.Attributes;
 
 namespace InstallerScriptGenerator
 {
@@ -13,8 +16,12 @@ namespace InstallerScriptGenerator
     {
         static void Main(string[] args)
         {
-            string assemblyPath = ;
-           
+            string assemblyPath = "C:\\Projects\\RediSQLCache\\RedisSqlCache\\bin\\Debug\\RediSql.dll";
+            var asm = Assembly.LoadFile(assemblyPath);
+            if (!asm.IsDefined(typeof(SqlInstallerScriptGeneratorExportedAssembly), false))
+                throw new Exception();
+            var sqlAssembly = new ExportedSqlAssembly(asm);
+            Console.WriteLine(sqlAssembly.GenerateInstallScript());
         }
     }
 }

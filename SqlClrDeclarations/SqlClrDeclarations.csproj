@@ -4,18 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CABBBA96-75AF-4F10-96AB-72B814B5A97E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{56C24720-8053-4CF5-8BF8-BAE7DBA78424}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InstallerScriptGenerator</RootNamespace>
-    <AssemblyName>InstallerScriptGenerator</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <RootNamespace>SqlClrDeclarations</RootNamespace>
+    <AssemblyName>SqlClrDeclarations</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,17 +21,14 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -46,27 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BO\ExportedSqlAssembly.cs" />
-    <Compile Include="BO\ExportedClrMethod.cs" />
-    <Compile Include="BO\ExportedItemBase.cs" />
-    <Compile Include="BO\ExportedSqlFunction.cs" />
-    <Compile Include="BO\ExportedSqlProcedure.cs" />
-    <Compile Include="BO\SqlParameter.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Attributes\ExportedFunctionAttribute.cs" />
+    <Compile Include="Attributes\SqlInstallerScriptGeneratorExportedAssembly.cs" />
+    <Compile Include="Attributes\SqlInstallerScriptGeneratorExportedAttributeBase.cs" />
+    <Compile Include="Attributes\SqlInstallerScriptGeneratorExportedProcedure.cs" />
+    <Compile Include="Attributes\SqlParameterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\ClrSqlTermsConverter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="InstallerTemplate.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SqlClrDeclarations\SqlClrDeclarations.csproj">
-      <Project>{56c24720-8053-4cf5-8bf8-bae7dba78424}</Project>
-      <Name>SqlClrDeclarations</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

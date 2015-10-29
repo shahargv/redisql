@@ -1,20 +1,18 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using SqlClrDeclarations.Attributes;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RediSql")]
+[assembly: AssemblyTitle("SqlClrDeclarations")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RediSql")]
+[assembly: AssemblyProduct("SqlClrDeclarations")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: SqlInstallerScriptGeneratorExportedAssembly("RediSql")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -22,7 +20,7 @@ using SqlClrDeclarations.Attributes;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("666fe4b7-0a6b-44df-b179-c394234e33de")]
+[assembly: Guid("56c24720-8053-4cf5-8bf8-bae7dba78424")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using InstallerScriptGenerator.ExternalInterfaces.Attributes;
 using Microsoft.SqlServer.Server;
+using SqlClrDeclarations.Attributes;
 
 namespace InstallerScriptGenerator.BO
 {
