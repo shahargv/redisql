@@ -26,7 +26,9 @@ public class Redis : IDisposable
 
     public enum KeyType
     {
-        None, String, List, Set
+        None, String, List, Set,
+        Hash,
+        ZSet
     }
 
     public class ResponseException : Exception
@@ -584,6 +586,10 @@ public class Redis : IDisposable
                 return KeyType.Set;
             case "list":
                 return KeyType.List;
+            case "zset":
+                return KeyType.ZSet;
+            case "hash":
+                return KeyType.Hash;
         }
         throw new ResponseException("Invalid value");
     }

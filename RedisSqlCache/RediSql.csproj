@@ -41,6 +41,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedisSharp\RedisSharp.cs" />
     <Compile Include="SqlClrComponents\Common\RedisConnection.cs" />
+    <Compile Include="SqlClrComponents\Enums.cs" />
     <Compile Include="SqlClrComponents\RedisqlLists.cs" />
     <Compile Include="SqlClrComponents\RedisqlRowsets.cs" />
     <Compile Include="SqlClrComponents\RedisqlStringValuesFunctions.cs" />

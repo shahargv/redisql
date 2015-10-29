@@ -18,7 +18,7 @@ namespace RediSql.SqlClrComponents
         public static void StoreQueryResultsData(string host, int port, string password, int? dbId, string key,
             string query, TimeSpan? expiration, bool replaceExisting)
         {
-            var valuesToAdd = ExecuteQueryAndGetResultList(query);
+            var rowsXmls = ExecuteQueryAndGetResultList(query);
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
                 if (redis.ContainsKey(key))
@@ -32,6 +32,8 @@ namespace RediSql.SqlClrComponents
                         throw new Exception("key with the same name already exists, and replace flag not enabled");
                     }
                 }
+                List<string> valuesToAdd = new List<string>(rowsXmls.Count + 1) { RowsetMagic };
+                valuesToAdd.AddRange(rowsXmls);
                 valuesToAdd.ForEach(val => RedisqlLists.AddToList(host, port, password, dbId, key, val, true, null));
                 if (expiration != null)
                 {
@@ -85,5 +87,7 @@ namespace RediSql.SqlClrComponents
                 return el.ToString();
             }
         }
+
+        public static string RowsetMagic => "REDISQLROWSET";
     }
 }

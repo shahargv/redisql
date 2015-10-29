@@ -19,6 +19,34 @@ namespace RediSql.SqlClrComponents
         }
 
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
+        public static string GetKeyType(string host, int port, string password, int? dbId, string key)
+        {
+            using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
+            {
+                var redisKeyType = redis.TypeOf(key);
+                switch (redisKeyType)
+                {
+                    case Redis.KeyType.None:
+                        return KeyType.NotExisting.ToString();
+                    case Redis.KeyType.String:
+                        return KeyType.String.ToString();
+                    case Redis.KeyType.List:
+                        if (RedisqlLists.GetListItemAtIndex(host, port, password, dbId, key, 0).Equals(RedisqlRowsets.RowsetMagic, StringComparison.OrdinalIgnoreCase))
+                            return KeyType.Rowset.ToString();
+                        return KeyType.List.ToString();
+                    case Redis.KeyType.Set:
+                        return KeyType.Set.ToString();
+                    case Redis.KeyType.ZSet:
+                        return KeyType.Set.ToString();
+                    case Redis.KeyType.Hash:
+                        return KeyType.Hash.ToString();
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static bool Rename(string host, int port, string password, int? dbId, string key, string keyNewName)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
@@ -28,8 +56,7 @@ namespace RediSql.SqlClrComponents
         }
 
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static bool SetRelativeExpiration(string host, int port, string password, int? dbId, string key,
-          TimeSpan expiration)
+        public static bool SetRelativeExpiration(string host, int port, string password, int? dbId, string key, TimeSpan expiration)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -38,8 +65,7 @@ namespace RediSql.SqlClrComponents
         }
 
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static bool SetExactExpiration(string host, int port, string password, int? dbId, string key,
-            DateTime expiration)
+        public static bool SetExactExpiration(string host, int port, string password, int? dbId, string key, DateTime expiration)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -66,8 +92,7 @@ namespace RediSql.SqlClrComponents
             }
         }
 
-        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false, FillRowMethodName = "GetKeys_RowFiller")
-        ]
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false, FillRowMethodName = "GetKeys_RowFiller")]
         public static IEnumerable GetKeys(string host, int port, string password, int? dbId, string filter)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))

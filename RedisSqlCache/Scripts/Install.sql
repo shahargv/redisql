@@ -46,6 +46,11 @@ CREATE FUNCTION redisql.DeleteKey(@host nvarchar(250), @port int = 6379, @passwo
 RETURNS bit
 AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlKeysManipulationFunctions].[DeleteKey]
 GO
+-------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION redisql.GetKeyType(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @key nvarchar(250))
+RETURNS varchar(50)
+AS EXTERNAL NAME [RediSql].[RediSql.SqlClrComponents.RedisqlKeysManipulationFunctions].[GetKeyType]
+GO
 --------------------------------------------------------------------------------------------------------------
 CREATE FUNCTION redisql.GetKeys(@host nvarchar(250), @port int = 6379, @password nvarchar(100) = null, @dbId int = null, @keysFilter nvarchar(250) ='*')
 RETURNS table(KeyName nvarchar(250))
@@ -173,30 +178,26 @@ BEGIN
 				) keyValueSet
 
 	DECLARE @colsNames NVARCHAR(2000)
-	SELECT  @colsNames = STUFF(( SELECT DISTINCT TOP 100 PERCENT
-									'],[' + t2.keyName
-							FROM    #dataToPivot AS t2
-							ORDER BY '],[' + t2.keyName
-							FOR XML PATH('')
-						  ), 1, 2, '') + ']'
-
+	SELECT @colsNames =COALESCE(@colsNames + ', ', '') + '[' +KeyName + ']'
+	FROM #dataToPivot
+	GROUP BY KeyName
 	DECLARE @query NVARCHAR(4000)
-	SET @query = N'SELECT '+
-	@colsNames +'
-	FROM
-	(SELECT  t2.BatchID
-		  , t1.KeyName
-		  , t1.Value
-	FROM    #dataToPivot AS t1
-			JOIN #dataToPivot AS t2 ON t1.BatchID = t2.BatchID) p
-	PIVOT
-	(
-	MAX([Value])
-	FOR KeyName IN
-	( '+
-	@colsNames +' )
-	) AS pvt
-	ORDER BY BatchID;'
+
+	SET @query = N'	SELECT '+
+					@colsNames +'
+					FROM
+					(
+						SELECT  t2.BatchID
+						,t1.KeyName
+						,t1.Value
+						FROM    #dataToPivot AS t1
+						JOIN #dataToPivot AS t2 ON t1.BatchID = t2.BatchID
+					) p
+					PIVOT	(
+								MAX([Value])
+								FOR KeyName IN	( '+@colsNames +' )
+							) AS pvt
+					ORDER BY BatchID;'
 	EXECUTE(@query)
 
 END
@@ -225,6 +226,9 @@ BEGIN
 	INSERT INTO #items(val)
 	SELECT Value 
 	FROM redisql.GetListItems(@host, @port, @password, @dbId, @key, default, default)
+
+	DELETE TOP (1)
+	FROM   #items
 
 	DECLARE @metadataXml xml = (SELECT TOP 1 cast(val as xml) FROM #items)
 	DELETE TOP (1)

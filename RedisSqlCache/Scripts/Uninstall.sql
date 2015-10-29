@@ -48,6 +48,8 @@ DROP PROCEDURE [redisql].[StoreQueryResultsData]
 GO
 DROP PROCEDURE [redisql].[GetStoredRowset]
 GO
+DROP PROCEDURE [redisql].[GetKeyType]
+GO
 DROP ASSEMBLY [RediSql]
 GO
 DROP SCHEMA redisql

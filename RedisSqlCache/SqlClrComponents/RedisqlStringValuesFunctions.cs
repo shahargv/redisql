@@ -50,7 +50,6 @@ namespace RediSql.SqlClrComponents
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
-
                 return redis.GetString(key);
             }
         }

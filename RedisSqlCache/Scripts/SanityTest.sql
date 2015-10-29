@@ -93,7 +93,7 @@ BEGIN
 	PRINT 'success: lists test (test 4)'
 END
 --TEST 5: Rowset storing
-DECLARE @test5KeyName varchar(50) = 'rr1'
+DECLARE @test5KeyName varchar(50) =  CAST(NEWID() as varchar(50))
 
 IF OBJECT_ID('tempdb..#test5') IS NOT NULL DROP TABLE #test5
 CREATE TABLE #test5(col1 nvarchar(200), col2 varchar(200), col3 nvarchar(max) null, col4 int null)
