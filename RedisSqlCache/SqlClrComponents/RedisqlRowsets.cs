@@ -9,14 +9,22 @@ using System.Xml;
 using System.Xml.Linq;
 using Microsoft.SqlServer.Server;
 using RediSql.SqlClrComponents.Common;
+using SqlClrDeclarations.Attributes;
 
 namespace RediSql.SqlClrComponents
 {
     public static class RedisqlRowsets
     {
-        [SqlFunction(DataAccess = DataAccessKind.Read, IsDeterministic = false)]
-        public static void StoreQueryResultsData(string host, int port, string password, int? dbId, string key,
-            string query, TimeSpan? expiration, bool replaceExisting)
+        [SqlInstallerScriptGeneratorExportedProcedure("StoreQueryResultsData", "redisql")]
+        [SqlProcedure]
+        public static void StoreQueryResultsData(string host,
+                                                    [SqlParameter(DefaultValue = "6379")]int port,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                                    string key,
+                                                    string query,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]TimeSpan? expiration,
+                                                    [SqlParameter(DefaultValue = false)]bool replaceExisting)
         {
             var rowsXmls = ExecuteQueryAndGetResultList(query);
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))

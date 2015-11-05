@@ -18,21 +18,22 @@ BEGIN
 	SELECT Value 
 	FROM redisql.GetListItems(@host, @port, @password, @dbId, @key, default, default)
 
+	DELETE TOP (1)
+	FROM   #items
+
 	DECLARE @metadataXml xml = (SELECT TOP 1 cast(val as xml) FROM #items)
 	DELETE TOP (1)
 	FROM   #items
 
-	DECLARE @columnsMetadata table(Seq int, Name nvarchar(250), DataType varchar(100), Size int, UnifiedDataTypeLength varchar(100))
-	INSERT INTO @columnsMetadata(Seq, Name, DataType, Size, UnifiedDataTypeLength)
+	DECLARE @columnsMetadata table(Seq int, Name nvarchar(250), DataType varchar(100))
+	INSERT INTO @columnsMetadata(Seq, Name, DataType)
 	SELECT	col.value('(@order)[1]', 'nvarchar(max)'),
 			col.value('(@name)[1]', 'nvarchar(max)'),
-			col.value('(@sqlType)[1]', 'nvarchar(max)'),
-			col.value('(@size)[1]', 'int'),
-			CASE WHEN col.value('(@sqlType)[1]', 'nvarchar(max)') IN ('nvarchar', 'varchar', 'char', 'text', 'ntext', 'nchar') AND col.value('(@size)[1]', 'int') <= 8000 THEN col.value('(@sqlType)[1]', 'nvarchar(max)') + '(' + col.value('(@size)[1]', 'varchar(10)') + ')' ELSE col.value('(@sqlType)[1]', 'nvarchar(max)') END
+			col.value('(@sqlType)[1]', 'nvarchar(max)')
 	FROM @metadataXml.nodes('/ColumnsMetadata/Column') as columns(col)
 
 	DECLARE @dynamicSelectors nvarchar(max)
-	SELECT @dynamicSelectors =COALESCE(@dynamicSelectors + ', ', '') + 'T.C.value(''/item[1]/' +Name +'[1]'', ''' + UnifiedDataTypeLength + ''') ' + Name 
+	SELECT @dynamicSelectors =COALESCE(@dynamicSelectors + ', ', '') + 'T.C.value(''/item[1]/' +Name +'[1]'', ''' + DataType + ''') ' + Name 
 	FROM @columnsMetadata
 	ORDER BY Seq
 

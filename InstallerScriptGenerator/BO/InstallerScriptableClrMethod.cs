@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace InstallerScriptGenerator.BO
 {
-    internal abstract class ExportedClrMethod : ExportedItemBase
+    internal abstract class InstallerScriptableClrMethod : InstallerScriptableItem
     {
         protected Type ContainedType { get; set; }
         protected MethodInfo Method { get; set; }
-        internal ExportedClrMethod(string name, string schemaName, ExportedSqlAssembly sqlAssembly, Type containedType, MethodInfo method)
+        internal InstallerScriptableClrMethod(string name, string schemaName, InstallerScriptableSqlAssembly sqlAssembly, Type containedType, MethodInfo method)
         {
             Name = name;
             SchemaName = schemaName;

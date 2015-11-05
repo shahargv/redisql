@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BO\ExportedSqlAssembly.cs" />
-    <Compile Include="BO\ExportedClrMethod.cs" />
-    <Compile Include="BO\ExportedItemBase.cs" />
-    <Compile Include="BO\ExportedSqlFunction.cs" />
-    <Compile Include="BO\ExportedSqlProcedure.cs" />
+    <Compile Include="BO\InstallerScriptableSqlAssembly.cs" />
+    <Compile Include="BO\InstallerScriptableClrMethod.cs" />
+    <Compile Include="BO\InstallerScriptableItem.cs" />
+    <Compile Include="BO\InstallerScriptableSqlFunction.cs" />
+    <Compile Include="BO\InstallerScriptableSqlProcedure.cs" />
     <Compile Include="BO\SqlParameter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using Microsoft.SqlServer.Server;
 using RediSql.SqlClrComponents.Common;
+using SqlClrDeclarations.Attributes;
 
 namespace RediSql.SqlClrComponents
 {
     public static class RedisqlGlobalServerFunctions
     {
-        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false, FillRowMethodName = "GetInfo_RowFiller")]
-        public static IEnumerable GetInfo(string host, int port, string password, int? dbId)
+        [SqlInstallerScriptGeneratorExportedFunction("GetServerInfo", "redisql")]
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false, FillRowMethodName = "GetInfo_RowFiller", TableDefinition = "KeyName nvarchar(512), Value nvarchar(max)")]
+        public static IEnumerable GetInfo(string host,
+                                            [SqlParameter(DefaultValue = "6379")]int port,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -25,8 +30,13 @@ namespace RediSql.SqlClrComponents
             value = settingRow.Value;
         }
 
-        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static void Save(string host, int port, string password, int? dbId, bool isBackground)
+        [SqlInstallerScriptGeneratorExportedProcedure("SaveChanges", "redisql")]
+        [SqlProcedure]
+        public static void Save(string host,
+                                            [SqlParameter(DefaultValue = "6379")]int port,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                            [SqlParameter(DefaultValue = true)] bool isBackground)
 
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
@@ -42,8 +52,12 @@ namespace RediSql.SqlClrComponents
             }
         }
 
-        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static void Flush(string host, int port, string password, int? dbId)
+        [SqlInstallerScriptGeneratorExportedProcedure("Flush", "redisql")]
+        [SqlProcedure]
+        public static void Flush(string host,
+                                            [SqlParameter(DefaultValue = "6379")]int port,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId)
 
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
@@ -59,8 +73,12 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("GetLastSaved", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static DateTime GetLastSaved(string host, int port, string password, int? dbId)
+        public static DateTime GetLastSaved(string host,
+                                            [SqlParameter(DefaultValue = "6379")]int port,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {

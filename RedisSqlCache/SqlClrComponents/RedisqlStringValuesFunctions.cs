@@ -1,15 +1,21 @@
 ﻿using System;
 using Microsoft.SqlServer.Server;
 using RediSql.SqlClrComponents.Common;
+using SqlClrDeclarations.Attributes;
 
 namespace RediSql.SqlClrComponents
 {
     public static class RedisqlStringValuesFunctions
     {
-
-        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static void SetStringValue(string host, int port, string password, int? dbId, string key, string value,
-            TimeSpan? expiration)
+        [SqlInstallerScriptGeneratorExportedProcedure("SetStringValue", "redisql")]
+        [SqlProcedure]
+        public static void SetStringValue(string host,
+                                                    [SqlParameter(DefaultValue = "6379")]int port,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                                    string key,
+                                                    string value,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]TimeSpan? expiration)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -19,9 +25,15 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("SetStringValueIfNotExists", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static bool SetStringValueIfNotExists(string host, int port, string password, int? dbId, string key,
-            string value, TimeSpan? expiration)
+        public static bool SetStringValueIfNotExists(string host,
+                                                    [SqlParameter(DefaultValue = "6379")]int port,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                                    string key,
+                                                    string value,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]TimeSpan? expiration)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -32,9 +44,15 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("GetSetStringValue", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static string GetSetStringValue(string host, int port, string password, int? dbId, string key,
-                 string value, TimeSpan? expiration)
+        public static string GetSetStringValue(string host,
+                                                    [SqlParameter(DefaultValue = "6379")]int port,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                                    string key,
+                                                    string value,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]TimeSpan? expiration)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -45,8 +63,13 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("GetStringValue", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static string GetStringValue(string host, int port, string password, int? dbId, string key)
+        public static string GetStringValue(string host,
+                                                    [SqlParameter(DefaultValue = "6379")]int port,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                                    string key)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {

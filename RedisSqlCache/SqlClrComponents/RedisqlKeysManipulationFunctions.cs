@@ -4,13 +4,19 @@ using System.Data.SqlTypes;
 using Microsoft.SqlServer.Server;
 using RediSql.Common;
 using RediSql.SqlClrComponents.Common;
+using SqlClrDeclarations.Attributes;
 
 namespace RediSql.SqlClrComponents
 {
     public static class RedisqlKeysManipulationFunctions
     {
+        [SqlInstallerScriptGeneratorExportedFunction("IsKeyExists", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static bool IsKeyExists(string host, int port, string password, int? dbId, string key)
+        public static bool IsKeyExists(string host,
+                                        [SqlParameter(DefaultValue = "6379")]int port,
+                                        [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                        [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                        string key)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -18,8 +24,13 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("GetKeyType", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static string GetKeyType(string host, int port, string password, int? dbId, string key)
+        public static string GetKeyType(string host,
+                                        [SqlParameter(DefaultValue = "6379")]int port,
+                                        [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                        [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                        string key)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -46,8 +57,14 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("RenameKey", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static bool Rename(string host, int port, string password, int? dbId, string key, string keyNewName)
+        public static bool Rename(string host,
+                                        [SqlParameter(DefaultValue = "6379")]int port,
+                                        [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                        [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                        string key,
+                                        string keyNewName)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -55,8 +72,14 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("SetRelativeExpiration", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static bool SetRelativeExpiration(string host, int port, string password, int? dbId, string key, TimeSpan expiration)
+        public static bool SetRelativeExpiration(string host,
+                                                    [SqlParameter(DefaultValue = "6379")]int port,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                                    string key,
+                                                    TimeSpan expiration)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -64,8 +87,14 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("SetExactExpiration", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static bool SetExactExpiration(string host, int port, string password, int? dbId, string key, DateTime expiration)
+        public static bool SetExactExpiration(string host,
+                                                    [SqlParameter(DefaultValue = "6379")]int port,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                                    string key,
+                                                    DateTime expiration)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -73,8 +102,13 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("GetKeyTTL", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static int? GetKeyTTL(string host, int port, string password, int? dbId, string key)
+        public static int? GetKeyTTL(string host,
+                                                    [SqlParameter(DefaultValue = "6379")]int port,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                                    [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                                    string key)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -83,8 +117,13 @@ namespace RediSql.SqlClrComponents
             }
         }
 
+        [SqlInstallerScriptGeneratorExportedFunction("DeleteKey", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
-        public static bool DeleteKey(string host, int port, string password, int? dbId, string key)
+        public static bool DeleteKey(string host,
+                                        [SqlParameter(DefaultValue = "6379")]int port,
+                                        [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                        [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                        string key)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
@@ -92,8 +131,13 @@ namespace RediSql.SqlClrComponents
             }
         }
 
-        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false, FillRowMethodName = "GetKeys_RowFiller")]
-        public static IEnumerable GetKeys(string host, int port, string password, int? dbId, string filter)
+        [SqlInstallerScriptGeneratorExportedFunction("GetKeys", "redisql")]
+        [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false, FillRowMethodName = "GetKeys_RowFiller", TableDefinition = "KeyName nvarchar(512)")]
+        public static IEnumerable GetKeys(string host,
+                                            [SqlParameter(DefaultValue = "6379")]int port,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]string password,
+                                            [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
+                                            string filter)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {

@@ -9,11 +9,11 @@ using SqlClrDeclarations.Attributes;
 
 namespace InstallerScriptGenerator.BO
 {
-    internal class ExportedSqlFunction : ExportedClrMethod
+    internal class InstallerScriptableSqlFunction : InstallerScriptableClrMethod
     {
         private readonly SqlInstallerScriptGeneratorExportedFunction _exportedFunctionAttribute;
         private readonly SqlFunctionAttribute _sqlFunctionAttribute;
-        public ExportedSqlFunction(string name, string schemaName, ExportedSqlAssembly sqlSqlAssembly, Type containedType, MethodInfo method) : base(name, schemaName, sqlSqlAssembly, containedType, method)
+        public InstallerScriptableSqlFunction(string name, string schemaName, InstallerScriptableSqlAssembly sqlSqlAssembly, MethodInfo method) : base(name, schemaName, sqlSqlAssembly, method.DeclaringType, method)
         {
             _exportedFunctionAttribute = method.GetCustomAttribute<SqlInstallerScriptGeneratorExportedFunction>();
             _sqlFunctionAttribute = method.GetCustomAttribute<SqlFunctionAttribute>();
@@ -28,7 +28,7 @@ AS EXTERNAL NAME[$$$SqlAssemblyName$$$].[$$$FullClrTypeName$$$].[$$$MethodName$$
 ");
             sb.Replace("$$$SchemaName$$$", SchemaName);
             sb.Replace("$$$SqlFunctionName$$$", Name);
-            sb.Replace("$$$ParametersList$$$", GenerateParametersList());
+            sb.Replace("$$$ParametersList$$$", SqlParameter.GenerateSqlParameterString(Method.GetParameters()));
             sb.Replace("$$$SqlReturnValueType$$$", GetSqlReturnValueType());
             sb.Replace("$$$SqlAssemblyName$$$", SqlAssembly.Name);
             sb.Replace("$$$FullClrTypeName$$$", ContainedType.FullName);
@@ -45,17 +45,7 @@ AS EXTERNAL NAME[$$$SqlAssemblyName$$$].[$$$FullClrTypeName$$$].[$$$MethodName$$
             return Utils.ClrSqlTermsConverter.ConvertClrTypeToSqlTypeName(Method.ReturnType);
         }
 
-        private string GenerateParametersList()
-        {
-            return string.Join(", ", Method.GetParameters().Select(param =>
-            {
-                var paramInfo = new SqlParameter(param);
-                return $"@{paramInfo.Name} {paramInfo.SqlType}";
-            }));
 
-
-
-        }
 
         internal override string GenerateUninstallScript()
         {
