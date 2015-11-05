@@ -49,12 +49,13 @@
     <Compile Include="SqlClrComponents\RedisqlGlobalServerFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\GetStoredRowset.sql" />
-    <Content Include="Scripts\Install.sql" />
+    <Content Include="Scripts\InstallerTemplate.txt" />
     <Content Include="Scripts\SanityTest.sql" />
+    <Content Include="TSQLCode\GetStoredRowset.sql" />
+    <Content Include="Scripts\Install.sql" />
     <Content Include="Scripts\Uninstall.sql" />
     <Content Include="Scripts\Usage.sql" />
-    <Content Include="Scripts\XmlToRowset.sql" />
+    <Content Include="TSQLCode\XmlToRowset.sql" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

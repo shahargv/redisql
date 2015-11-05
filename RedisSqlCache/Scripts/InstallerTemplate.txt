@@ -1,0 +1,15 @@
+﻿--
+--
+DECLARE @dbName nvarchar(50) = '[check1]'
+
+EXEC('ALTER DATABASE ' + @dbname + ' SET TRUSTWORTHY ON')
+GO
+CREATE SCHEMA [redisql] AUTHORIZATION [dbo]
+GO
+~~~InstallScript:~~~c:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\SqlClrDeclarations.dll
+GO
+~~~InstallScript:~~~c:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\RediSql.dll
+GO
+~~~IncludeFile:~~~c:\Projects\RediSQLCache\RedisSqlCache\TSQLCode\GetStoredRowset.sql
+GO
+~~~IncludeFile:~~~c:\Projects\RediSQLCache\RedisSqlCache\TSQLCode\XmlToRowset.sql

@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ExportedFunctionAttribute.cs" />
-    <Compile Include="Attributes\SqlInstallerScriptGeneratorExportedAssembly.cs" />
     <Compile Include="Attributes\SqlInstallerScriptGeneratorExportedAttributeBase.cs" />
     <Compile Include="Attributes\SqlInstallerScriptGeneratorExportedProcedure.cs" />
     <Compile Include="Attributes\SqlParameterAttribute.cs" />

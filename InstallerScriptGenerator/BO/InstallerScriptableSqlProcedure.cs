@@ -22,8 +22,10 @@ namespace InstallerScriptGenerator.BO
         internal override string GenerateInstallScript()
         {
             StringBuilder sb = new StringBuilder(@"
+GO
 CREATE PROCEDURE $$$SchemaName$$$.$$$SqlProcedureName$$$($$$ParametersList$$$)
 AS EXTERNAL NAME[$$$SqlAssemblyName$$$].[$$$FullClrTypeName$$$].[$$$MethodName$$$]
+GO
 ");
             sb.Replace("$$$SchemaName$$$", SchemaName);
             sb.Replace("$$$SqlProcedureName$$$", Name);

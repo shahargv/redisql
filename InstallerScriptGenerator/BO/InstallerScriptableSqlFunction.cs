@@ -22,9 +22,11 @@ namespace InstallerScriptGenerator.BO
         internal override string GenerateInstallScript()
         {
             StringBuilder sb = new StringBuilder(@"
+GO
 CREATE FUNCTION $$$SchemaName$$$.$$$SqlFunctionName$$$($$$ParametersList$$$)
 RETURNS $$$SqlReturnValueType$$$
 AS EXTERNAL NAME[$$$SqlAssemblyName$$$].[$$$FullClrTypeName$$$].[$$$MethodName$$$]
+GO
 ");
             sb.Replace("$$$SchemaName$$$", SchemaName);
             sb.Replace("$$$SqlFunctionName$$$", Name);

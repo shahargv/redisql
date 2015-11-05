@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -15,8 +16,8 @@ namespace InstallerScriptGenerator.BO
 
         public InstallerScriptableSqlAssembly(Assembly assembly)
         {
-            var assemblyAttribute = assembly.GetCustomAttribute<SqlInstallerScriptGeneratorExportedAssembly>();
-            Name = assemblyAttribute.SqlAssemblyName;
+            var assemblyAttribute = assembly.GetCustomAttribute<AssemblyTitleAttribute>();
+            Name = assemblyAttribute.Title;
             Path = assembly.Location;
             Assembly = assembly;
         }
@@ -26,10 +27,10 @@ namespace InstallerScriptGenerator.BO
             string template = @"
 CREATE ASSEMBLY [$$$name$$$]
 AUTHORIZATION [dbo]
-FROM '$$$path$$$'
+FROM 0x$$$bits$$$
 WITH PERMISSION_SET = UNSAFE
 ";
-            return template.Replace("$$$path$$$", Path).Replace("$$$name$$$", Name);
+            return template.Replace("$$$bits$$$", BitConverter.ToString(File.ReadAllBytes(Path)).Replace("-", string.Empty)).Replace("$$$name$$$", Name);
         }
 
         internal override string GenerateUninstallScript()

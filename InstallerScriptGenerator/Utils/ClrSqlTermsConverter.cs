@@ -17,7 +17,7 @@ namespace InstallerScriptGenerator.Utils
             if (t == typeof(short)) return "smallint";
             if (t == typeof(DateTime)) return "datetime2";
             if (t == typeof(TimeSpan)) return "time";
-            if (t == typeof(string)) return "nvarchar(max)";
+            if (t == typeof(string)) return "nvarchar(4000)";
             if (t == typeof(bool)) return "bit";
             throw new ArgumentOutOfRangeException("unknown type: " + t.FullName);
         }

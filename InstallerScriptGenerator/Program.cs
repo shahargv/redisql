@@ -16,21 +16,11 @@ namespace InstallerScriptGenerator
     {
         static void Main(string[] args)
         {
-            string assemblyPath = "C:\\Projects\\RediSQLCache\\RedisSqlCache\\bin\\Debug\\RediSql.dll";
-            var asm = Assembly.LoadFile(assemblyPath);
-            if (!asm.IsDefined(typeof(SqlInstallerScriptGeneratorExportedAssembly), false))
-                throw new Exception();
-            var sqlAssembly = new InstallerScriptableSqlAssembly(asm);
-            Console.WriteLine(sqlAssembly.GenerateInstallScript());
-            StringBuilder installScriptText = new StringBuilder();
-            foreach (var method in asm.GetTypes().SelectMany(k => k.GetMethods()).Where(k => k.GetCustomAttributes(false).Any(l => l is SqlInstallerScriptGeneratorExportedAttributeBase)))
-            {
-                var attribute = method.GetCustomAttribute<SqlInstallerScriptGeneratorExportedAttributeBase>();
-                var scriptableItem = InstallerScriptableItem.GetScreiptableItem(attribute, sqlAssembly, method);
-                string str = scriptableItem.GenerateInstallScript();
-                installScriptText.AppendLine(str);
-               
-            }
+            string templateFile = args[0];
+            string outputFilePath = args[1];
+            TemplateParser parser = new TemplateParser(templateFile);
+            string result = parser.ParseTemplate();
+            File.WriteAllText(outputFilePath, result);
         }
     }
 }
