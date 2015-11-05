@@ -1,0 +1,10 @@
+﻿~~~UninstallScript:~~~c:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\RediSql.dll
+GO
+~~~UninstallScript:~~~c:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\SqlClrDeclarations.dll
+GO
+DROP PROCEDURE [redisql].[GetStoredRowset]
+GO
+DROP PROCEDURE [redisql].[ConvertXmlToRowset]
+GO
+DROP SCHEMA [redisql]
+GO

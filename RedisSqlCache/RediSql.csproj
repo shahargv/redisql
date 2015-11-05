@@ -51,6 +51,7 @@
   <ItemGroup>
     <Content Include="Scripts\InstallerTemplate.txt" />
     <Content Include="Scripts\SanityTest.sql" />
+    <Content Include="Scripts\UninstallTemplate.txt" />
     <Content Include="TSQLCode\GetStoredRowset.sql" />
     <Content Include="Scripts\Install.sql" />
     <Content Include="Scripts\Uninstall.sql" />
