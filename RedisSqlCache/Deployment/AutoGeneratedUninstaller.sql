@@ -31,5 +31,7 @@ DROP PROCEDURE [redisql].[GetStoredRowset]
 GO
 DROP PROCEDURE [redisql].[ConvertXmlToRowset]
 GO
+DROP PROCEDURE [redisql].[GetSetStoredRowset]
+GO
 DROP SCHEMA [redisql]
 GO

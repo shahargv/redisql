@@ -13,3 +13,5 @@ GO
 ~~~IncludeFile:~~~!!!projDir!!!\TSQLCode\GetStoredRowset.sql
 GO
 ~~~IncludeFile:~~~!!!projDir!!!\TSQLCode\XmlToRowset.sql
+GO
+~~~IncludeFile:~~~!!!projDir!!!\TSQLCode\GetSetStoredRowset.sql
