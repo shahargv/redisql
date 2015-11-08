@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RediSql", "RedisSqlCache\RediSql.csproj", "{666FE4B7-0A6B-44DF-B179-C394234E33DE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CABBBA96-75AF-4F10-96AB-72B814B5A97E} = {CABBBA96-75AF-4F10-96AB-72B814B5A97E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerScriptGenerator", "InstallerScriptGenerator\InstallerScriptGenerator.csproj", "{CABBBA96-75AF-4F10-96AB-72B814B5A97E}"
 EndProject

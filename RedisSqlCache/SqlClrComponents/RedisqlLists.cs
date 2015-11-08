@@ -49,7 +49,7 @@ namespace RediSql.SqlClrComponents
             }
         }
 
-        [SqlInstallerScriptGeneratorExportedFunction("LeftPop", "redisql")]
+        [SqlInstallerScriptGeneratorExportedFunction("ListLeftPop", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static string LeftPop(string host,
                                                 [SqlParameter(DefaultValue = "6379")]int port,
@@ -63,7 +63,7 @@ namespace RediSql.SqlClrComponents
             }
         }
 
-        [SqlInstallerScriptGeneratorExportedFunction("RightPop", "redisql")]
+        [SqlInstallerScriptGeneratorExportedFunction("ListRightPop", "redisql")]
         [SqlFunction(DataAccess = DataAccessKind.None, IsDeterministic = false)]
         public static string RightPop(string host,
                                                 [SqlParameter(DefaultValue = "6379")]int port,

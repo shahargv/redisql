@@ -6,10 +6,10 @@ EXEC('ALTER DATABASE ' + @dbname + ' SET TRUSTWORTHY ON')
 GO
 CREATE SCHEMA [redisql] AUTHORIZATION [dbo]
 GO
-~~~InstallScript:~~~c:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\SqlClrDeclarations.dll
+~~~InstallScript:~~~!!!binDir!!!\SqlClrDeclarations.dll
 GO
-~~~InstallScript:~~~c:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\RediSql.dll
+~~~InstallScript:~~~!!!binDir!!!\RediSql.dll
 GO
-~~~IncludeFile:~~~c:\Projects\RediSQLCache\RedisSqlCache\TSQLCode\GetStoredRowset.sql
+~~~IncludeFile:~~~!!!projDir!!!\TSQLCode\GetStoredRowset.sql
 GO
-~~~IncludeFile:~~~c:\Projects\RediSQLCache\RedisSqlCache\TSQLCode\XmlToRowset.sql
+~~~IncludeFile:~~~!!!projDir!!!\TSQLCode\XmlToRowset.sql

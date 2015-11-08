@@ -1,6 +1,6 @@
-﻿~~~UninstallScript:~~~c:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\RediSql.dll
+﻿~~~UninstallScript:~~~!!!binDir!!!\RediSql.dll
 GO
-~~~UninstallScript:~~~c:\Projects\RediSQLCache\RedisSqlCache\bin\Debug\SqlClrDeclarations.dll
+~~~UninstallScript:~~~!!!binDir!!!\SqlClrDeclarations.dll
 GO
 DROP PROCEDURE [redisql].[GetStoredRowset]
 GO

@@ -63,7 +63,7 @@ namespace InstallerScriptGenerator
         {
             StringBuilder sb = new StringBuilder();
             var asm = Assembly.LoadFile(assemeblyPath);
-            
+
             IterateScriptableItemsInsideAssembly(asm, item => sb.AppendLine(item.GenerateUninstallScript()));
             sb.AppendLine(new InstallerScriptableSqlAssembly(asm).GenerateUninstallScript());
             return sb.ToString();
@@ -82,7 +82,9 @@ namespace InstallerScriptGenerator
         {
             var sqlAssembly = new InstallerScriptableSqlAssembly(asm);
 
-            foreach (var method in asm.GetTypes().SelectMany(k => k.GetMembers()).Where(k => k.GetCustomAttributes(false).Any(l => l is SqlInstallerScriptGeneratorExportedAttributeBase)))
+            foreach (var method in asm.GetTypes().SelectMany(k => k.GetMembers()).Where(k => k.GetCustomAttributes(false)
+                                                                                    .Any(l => l is SqlInstallerScriptGeneratorExportedAttributeBase))
+                                                                                    .OrderBy(k => k.Name))
             {
                 var attribute = method.GetCustomAttribute<SqlInstallerScriptGeneratorExportedAttributeBase>();
                 var scriptableItem = InstallerScriptableItem.GetScreiptableItem(attribute, sqlAssembly, method);
