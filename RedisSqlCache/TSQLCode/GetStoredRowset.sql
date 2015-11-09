@@ -18,6 +18,11 @@ BEGIN
 	SELECT Value 
 	FROM redisql.GetListItems(@host, @port, @password, @dbId, @key, default, default)
 
+	IF (SELECT COUNT(*) FROM #items) = 0
+	BEGIN
+		 SELECT NULL
+	END
+
 	DELETE TOP (1)
 	FROM   #items
 

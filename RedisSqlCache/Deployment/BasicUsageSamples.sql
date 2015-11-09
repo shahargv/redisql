@@ -40,6 +40,18 @@ SELECT [redisql].[GetStringValue] (
   ,default -- dbid: 0
   ,'SimpleStringKey')
 
+--If the key exists in Redis server, just return the value from the server (and extend expiration, if required).
+--If the key doesn't exists, store the key in Redis and return it.
+SELECT [redisql].[GetSetStringValue] (
+   'localhost'
+  ,default --port
+  ,default --pasword
+  ,default --db
+  ,'SampleStringKey5'
+  ,'SampleValue'
+  ,default --no expiration
+  )
+
 
 --Get all keys from Redis. 
 --not meant for production code, but mostly for debugging
@@ -75,7 +87,26 @@ EXEC [redisql].StoreQueryResultsData
 		@query = N'SELECT * FROM INFORMATION_SCHEMA.ROUTINES',
 		@replaceExisting = 1
 
+--store the result of the query in Redis, but with 50 seconds expiration
+EXEC [redisql].StoreQueryResultsData
+		@host = N'localhost',
+		@port = 6379,
+		@key = 'RowsetKey7',
+		@query = N'SELECT * FROM INFORMATION_SCHEMA.ROUTINES',
+		@replaceExisting = 1,
+		@expiration = '00:00:50'
+
+
 --Get the results of the query we stored before
+--If key not exists, return null
 EXEC [redisql].[GetStoredRowset]		
 		@host = N'localhost',		
 		@key ='RowsetKey1'
+
+--If the key exists in Redis, return the stored rowset
+--If the key doesn't exists, run the query, return the results and also store them in Redis
+EXEC [redisql].GetSetStoredRowset
+		@host = N'localhost',
+		@port = 6379,
+		@key = 'RowsetKey9',
+		@query = N'SELECT * FROM INFORMATION_SCHEMA.ROUTINES'
