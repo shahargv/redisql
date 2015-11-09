@@ -7,6 +7,14 @@
 [string]$RedisqlBinDir,
 [string]$RedisqlProjDir
 )
+function ZipFiles( $zipfilename, $sourcedir )
+{
+   Add-Type -Assembly System.IO.Compression.FileSystem
+   $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
+   [System.IO.Compression.ZipFile]::CreateFromDirectory($sourcedir,
+        $zipfilename, $compressionLevel, $false)
+}
+
 $sqlScriptsGeneratorPath = [IO.Path]::Combine($SolutionDir, "ScriptGenerator","InstallerScriptGenerator.exe")
 Write-Host $sqlScriptsGeneratorPath
 $installerTemplateText = [IO.File]::ReadAllText($InstallerTemplatePath)

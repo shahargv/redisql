@@ -3,6 +3,8 @@
 DECLARE @dbName nvarchar(50) = '[check1]'
 
 EXEC('ALTER DATABASE ' + @dbname + ' SET TRUSTWORTHY ON')
+
+
 GO
 CREATE SCHEMA [redisql] AUTHORIZATION [dbo]
 GO
@@ -15,3 +17,12 @@ GO
 ~~~IncludeFile:~~~!!!projDir!!!\TSQLCode\XmlToRowset.sql
 GO
 ~~~IncludeFile:~~~!!!projDir!!!\TSQLCode\GetSetStoredRowset.sql
+
+sp_configure 'show advanced options', 1;
+GO
+RECONFIGURE;
+GO
+sp_configure 'clr enabled', 1;
+GO
+RECONFIGURE;
+GO

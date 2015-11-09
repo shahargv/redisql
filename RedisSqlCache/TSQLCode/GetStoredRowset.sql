@@ -33,7 +33,7 @@ BEGIN
 	FROM @metadataXml.nodes('/ColumnsMetadata/Column') as columns(col)
 
 	DECLARE @dynamicSelectors nvarchar(max)
-	SELECT @dynamicSelectors =COALESCE(@dynamicSelectors + ', ', '') + 'T.C.value(''/item[1]/' +Name +'[1]'', ''' + DataType + ''') ' + Name 
+	SELECT @dynamicSelectors =COALESCE(@dynamicSelectors + ', ', '') + 'T.C.value(''/item[1]/I' +CAST(Seq as varchar(10)) +'[1]'', ''' + DataType + ''') ' + Name 
 	FROM @columnsMetadata
 	ORDER BY Seq
 
@@ -54,4 +54,5 @@ BEGIN
 	'
 	EXECUTE(@sql)
 END
+
 GO

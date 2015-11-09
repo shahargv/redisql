@@ -66,7 +66,7 @@ namespace RediSql.SqlClrComponents
                         for (int index = 0; index < rowsetReader.FieldCount; index++)
                         {
                             if (!rowsetReader.IsDBNull(index))
-                                el.Add(new XElement(rowsetReader.GetName(index), rowsetReader.GetValue(index)));
+                                el.Add(new XElement("I" + (index + 1), rowsetReader.GetValue(index)));
                         }
                         valuesToAdd.Add(el.ToString());
                     }
