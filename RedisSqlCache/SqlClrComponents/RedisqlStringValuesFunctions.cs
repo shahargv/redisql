@@ -59,7 +59,7 @@ namespace RediSql.SqlClrComponents
                 string result = redis.GetSet(key, value);
                 if (expiration != null)
                     redis.Expire(key, (int)expiration.Value.TotalSeconds);
-                return result;
+                return result ?? value; //change the default Redis behavior, and make it be like GetSet on the rowset
             }
         }
 

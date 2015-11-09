@@ -49,6 +49,7 @@
     <Compile Include="SqlClrComponents\RedisqlGlobalServerFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Deployment\BasicUsageSamples.sql" />
     <Content Include="Deployment\Install.sql" />
     <Content Include="Deployment\Readme.txt" />
     <Content Include="Deployment\Uninstall.sql" />

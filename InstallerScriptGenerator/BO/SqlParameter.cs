@@ -20,6 +20,7 @@ namespace InstallerScriptGenerator.BO
                 if (DefaultValue == null) return null;
                 if (DefaultValue == DBNull.Value) return "null";
                 if (DefaultValue == typeof(DBNull)) return "null";
+                if (SqlType == Utils.ClrSqlTermsConverter.ConvertClrTypeToSqlTypeName(typeof(string))) return "'" + DefaultValue + "'";
                 return DefaultValue.ToString();
             }
         }

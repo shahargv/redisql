@@ -137,7 +137,7 @@ namespace RediSql.SqlClrComponents
                                             [SqlParameter(DefaultValue = "6379")]int port,
                                             [SqlParameter(DefaultValue = typeof(DBNull))]string password,
                                             [SqlParameter(DefaultValue = typeof(DBNull))]int? dbId,
-                                            string filter)
+                                            [SqlParameter(DefaultValue = "*")]string filter)
         {
             using (var redis = RedisConnection.GetConnection(host, port, password, dbId))
             {
