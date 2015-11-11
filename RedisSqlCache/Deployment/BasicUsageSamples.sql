@@ -40,6 +40,15 @@ SELECT [redisql].[GetStringValue] (
   ,default -- dbid: 0
   ,'SimpleStringKey')
 
+--Delete 'SimpleStringKey' from Redis
+SELECT [redisql].[DeleteKey] (
+   'localhost'
+  ,default --default port
+  ,default -- no password
+  ,default -- dbid: 0
+  ,'SimpleStringKey')
+
+
 --If the key exists in Redis server, just return the value from the server (and extend expiration, if required).
 --If the key doesn't exists, store the key in Redis and return it.
 SELECT [redisql].[GetSetStringValue] (
@@ -70,7 +79,7 @@ SELECT * FROM [redisql].[GetKeys] (
   ,default
   ,default
   ,default
-  ,'*String*' -- get all keys, no filter
+  ,'*String*' 
   )
 
 --Commit all changes to Redis, by producing point-in-time snapshot
