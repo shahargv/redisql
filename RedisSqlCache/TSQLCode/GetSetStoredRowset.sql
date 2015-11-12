@@ -21,12 +21,15 @@ BEGIN
 		BEGIN
 			SELECT redisql.SetRelativeExpiration(@host, @port, @password, @dbId, @key, @expiration)
 		END
-		EXECUTE redisql.GetStoredRowset @host, @port, @password, @dbId, @key
+		DECLARE @numberOfRows int
+		EXECUTE @numberOfRows = redisql.GetStoredRowset @host, @port, @password, @dbId, @key
+		RETURN @numberOfRows
 	END
 	ELSE
 	BEGIN
 		EXECUTE redisql.StoreQueryResultsData @host, @port, @password, @dbId, @key, @query, @expiration
 		EXEC sp_executesql @query
+		RETURN -1
 	END
 END
 GO

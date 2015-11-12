@@ -108,14 +108,21 @@ EXEC [redisql].StoreQueryResultsData
 
 --Get the results of the query we stored before
 --If key not exists, return null
-EXEC [redisql].[GetStoredRowset]		
+DECLARE @result int
+EXEC @result = [redisql].[GetStoredRowset]		
 		@host = N'localhost',		
 		@key ='RowsetKey1'
+PRINT @result	--if result >= 0: there was a key that name, with rows, and result is the number of the rows stored. 
+				--if result == -1, key not exists
 
 --If the key exists in Redis, return the stored rowset
 --If the key doesn't exists, run the query, return the results and also store them in Redis
-EXEC [redisql].GetSetStoredRowset
+DECLARE @result int
+EXEC @result= [redisql].GetSetStoredRowset
 		@host = N'localhost',
 		@port = 6379,
 		@key = 'RowsetKey9',
 		@query = N'SELECT * FROM INFORMATION_SCHEMA.ROUTINES'
+
+PRINT @result	--if result >= 0: there was a key that name, with rows, and result is the number of the rows stored. 
+				--if result == -1, key not exists and the query executed against SQL Server

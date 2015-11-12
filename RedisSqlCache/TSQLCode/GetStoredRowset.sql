@@ -21,6 +21,7 @@ BEGIN
 	IF (SELECT COUNT(*) FROM #items) = 0
 	BEGIN
 		 SELECT NULL
+		 RETURN -1
 	END
 
 	DELETE TOP (1)
@@ -58,6 +59,7 @@ BEGIN
 					) o
 	'
 	EXECUTE(@sql)
+	RETURN (SELECT COUNT(*) FROM #items)
 END
 
 GO

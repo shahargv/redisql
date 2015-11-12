@@ -11,7 +11,7 @@ namespace Checks
     {
         static void Main(string[] args)
         {
-            var a = RedisqlKeysManipulationFunctions.GetKeys("localhost", 6379, null, null, "*");
+            var a = RedisqlLists.GetListItems("localhost", 6379, null, null, "Sdgsdg", 0 , -1);
         }
     }
 }
