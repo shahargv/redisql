@@ -1,6 +1,9 @@
---
---
-DECLARE @dbName nvarchar(50) = '[check1]'
+--RediSql - Redis client for T-SQL
+--For installation instructions and other information, please visit http://redisql.ishahar.net
+
+--REMEMBER: make sure you run this query on the correct database!
+
+DECLARE @dbName nvarchar(50) = '[check1]' --CHANGE HERE TO YOUR DB NAME
 
 EXEC('ALTER DATABASE ' + @dbname + ' SET TRUSTWORTHY ON')
 
@@ -342,7 +345,7 @@ BEGIN
 	BEGIN
 		EXECUTE redisql.StoreQueryResultsData @host, @port, @password, @dbId, @key, @query, @expiration
 		EXEC sp_executesql @query
-		RETURN -2
+		RETURN -1
 	END
 END
 GO

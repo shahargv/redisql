@@ -1,3 +1,7 @@
+--RediSql - Redis client for T-SQL
+--For installation instructions and other information, please visit http://redisql.ishahar.net
+
+--REMEMBER: make sure you run this query on the correct database!
 DROP PROCEDURE redisql.AddToList
 DROP FUNCTION redisql.DeleteKey
 DROP PROCEDURE redisql.Flush
