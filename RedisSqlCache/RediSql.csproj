@@ -51,6 +51,7 @@
   <ItemGroup>
     <Content Include="Deployment\BasicUsageSamples.sql" />
     <Content Include="Deployment\Install.sql" />
+    <Content Include="Deployment\LICENSE.txt" />
     <Content Include="Deployment\Readme.txt" />
     <Content Include="Deployment\Uninstall.sql" />
     <Content Include="Scripts\InstallerTemplate.txt" />
